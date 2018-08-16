@@ -25,26 +25,27 @@ public class ShipThread implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         semaphore.acquire();
-        LOGGER.info("корабль приплыл");
+        LOGGER.info("корабль "+ship.getId()+ " приплыл");
         if (ship.getItem().peekFirst()!=null) {
             for (String s : ship.getItem()) {
-                while (port.addItem(s)){
+                if (port.getStorage().size()<port.getCapacity()){
                     port.addItem(s);
                     ship.getItem().remove(s);
-                    LOGGER.info("на склад загружено: "+ s);
+                    LOGGER.info("на склад c корабля "+ship.getId()+" разгружено: "+ s);
                 }
-                LOGGER.info("корабль разгрузился");
             }
+            LOGGER.info("корабль "+ship.getId()+" разгрузился");
         }
-        while (ship.getItem().size()<ship.getCargo()){
-            if (port.removeItem()!=null) {
-                String s = String.valueOf(port.removeItem());
+        for (int i = 0; i <ship.getCargo(); i++){
+//            if (port.removeItem()!=null) {
+              if (true) {
+                String s = port.removeItem();
                 ship.getItem().push(s);
-                LOGGER.info("на корабль загружено: "+ s);
+                LOGGER.info("на корабль "+ship.getId()+" загружено: "+ s);
             }
         }
-        LOGGER.info("корабль загрузился");
-        LOGGER.info("корабль отплыл");
+        LOGGER.info("корабль "+ship.getId()+" загрузился");
+        LOGGER.info("корабль "+ship.getId()+" отплыл");
         semaphore.release();
         return 1;
     }

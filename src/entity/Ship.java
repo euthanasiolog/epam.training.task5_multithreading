@@ -7,12 +7,22 @@ import java.util.Deque;
  * Created by piatr on 15.08.18.
  */
 public class Ship {
+    private int id;
     private volatile int cargo;
     private Deque<String> item;
 
-    public Ship(int cargo) {
+    public Ship(int cargo, int id) {
+        this.id = id;
+
         this.cargo = cargo;
         item = new ArrayDeque<>(cargo);
+        for (int i = 0; i<cargo; i++) {
+            item.add(id+" "+String.valueOf(Math.random()*100+1));
+        }
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getCargo() {

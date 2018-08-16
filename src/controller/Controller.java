@@ -24,7 +24,7 @@ public class Controller {
     public static void main(String[] args) {
         List<Callable<Integer>> callable = new ArrayList<>();
         for (int i = 0; i<15; i++) {
-            callable.add(new ShipThread(new Ship((int) (Math.random()*20+2)), PORT, SEMAPHORE));
+            callable.add(new ShipThread(new Ship((int) (Math.random()*20+2), i+1), PORT, SEMAPHORE));
         }
         try {
             executorService.invokeAll(callable);

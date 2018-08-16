@@ -44,7 +44,7 @@ public class Port {
         return storage.offerLast(item);      // Проверить, работает ли это
     }
 
-    public Optional<String> removeItem() {
-        return Optional.ofNullable(storage.pollFirst());
+    public String removeItem() {
+        return storage.pollFirst();
     }
 }
