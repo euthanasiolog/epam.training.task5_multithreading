@@ -3,6 +3,7 @@ package entity;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by piatr on 15.08.18.
@@ -11,7 +12,8 @@ public class Port {
     private int dock; // количество доков
     private int capacity; // вместимость склада
     private Deque<String> storage; // склад
-    private static volatile Port instance;
+    private static Port instance;
+    private static ReentrantLock lock = new ReentrantLock();
 
     private Port(int dock, int capacity) {
         this.dock = dock;
@@ -21,8 +23,12 @@ public class Port {
 
     public static Port getInstance(int dock, int capacity) {
         if (instance == null) {
-            synchronized (Port.class){
+            lock.lock();
+            try
+            {
                 if (instance == null) return new Port(dock, capacity);
+            } finally {
+            lock.unlock();
             }
         }
         return instance;

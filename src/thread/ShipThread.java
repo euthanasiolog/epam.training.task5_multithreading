@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by piatr on 16.08.18.
@@ -15,6 +16,7 @@ public class ShipThread implements Callable<Integer> {
     private Ship ship;
     private Port port;
     private Semaphore semaphore;
+    private ReentrantLock lock = new ReentrantLock();
 
     public ShipThread(Ship ship, Port port, Semaphore semaphore) {
         this.ship = ship;
@@ -27,6 +29,7 @@ public class ShipThread implements Callable<Integer> {
         semaphore.acquire();
         LOGGER.info("корабль "+ship.getId()+ " приплыл");
         if (ship.getItem().peekFirst()!=null) {
+            lock.lock();
             for (String s : ship.getItem()) {
                 if (port.getStorage().size()<port.getCapacity()){
                     port.addItem(s);
@@ -34,16 +37,18 @@ public class ShipThread implements Callable<Integer> {
                     LOGGER.info("на склад c корабля "+ship.getId()+" разгружено: "+ s);
                 }
             }
+            lock.unlock();
             LOGGER.info("корабль "+ship.getId()+" разгрузился");
         }
+        lock.lock();
         for (int i = 0; i <ship.getCargo(); i++){
-//            if (port.removeItem()!=null) {
-              if (true) {
+            if (port.removeItem()!=null) {
                 String s = port.removeItem();
                 ship.getItem().push(s);
                 LOGGER.info("на корабль "+ship.getId()+" загружено: "+ s);
             }
         }
+        lock.unlock();
         LOGGER.info("корабль "+ship.getId()+" загрузился");
         LOGGER.info("корабль "+ship.getId()+" отплыл");
         semaphore.release();

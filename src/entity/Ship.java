@@ -8,7 +8,7 @@ import java.util.Deque;
  */
 public class Ship {
     private int id;
-    private volatile int cargo;
+    private int cargo;
     private Deque<String> item;
 
     public Ship(int cargo, int id) {
@@ -27,10 +27,6 @@ public class Ship {
 
     public int getCargo() {
         return cargo;
-    }
-
-    public void setCargo(int cargo) {
-        this.cargo = cargo;
     }
 
     public Deque<String> getItem() {
