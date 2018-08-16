@@ -30,28 +30,34 @@ public class ShipThread implements Callable<Integer> {
         LOGGER.info("корабль "+ship.getId()+ " приплыл");
         if (ship.getItem().peekFirst()!=null) {
             lock.lock();
+            try {
             for (String s : ship.getItem()) {
                 if (port.getStorage().size()<port.getCapacity()){
                     port.addItem(s);
                     ship.getItem().remove(s);
                     LOGGER.info("на склад c корабля "+ship.getId()+" разгружено: "+ s);
+                    }
                 }
+            } finally {
+                lock.unlock();
             }
-            lock.unlock();
             LOGGER.info("корабль "+ship.getId()+" разгрузился");
         }
         lock.lock();
-        for (int i = 0; i <ship.getCargo(); i++){
-            if (port.removeItem()!=null) {
-                String s = port.removeItem();
-                ship.getItem().push(s);
-                LOGGER.info("на корабль "+ship.getId()+" загружено: "+ s);
+        try {
+            for (int i = 0; i <ship.getCargo(); i++){
+                if (port.removeItem()!=null) {
+                    String s = port.removeItem();
+                    ship.getItem().push(s);
+                    LOGGER.info("на корабль "+ship.getId()+" загружено: "+ s);
+                } else break;
             }
+        } finally {
+            lock.unlock();
+            LOGGER.info("корабль "+ship.getId()+" загрузился");
+            LOGGER.info("корабль "+ship.getId()+" отплыл");
+            semaphore.release();
         }
-        lock.unlock();
-        LOGGER.info("корабль "+ship.getId()+" загрузился");
-        LOGGER.info("корабль "+ship.getId()+" отплыл");
-        semaphore.release();
         return 1;
     }
 }

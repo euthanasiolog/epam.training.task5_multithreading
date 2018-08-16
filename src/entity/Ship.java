@@ -2,11 +2,13 @@ package entity;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by piatr on 15.08.18.
  */
 public class Ship {
+    private ReentrantLock lock = new ReentrantLock();
     private int id;
     private int cargo;
     private Deque<String> item;
