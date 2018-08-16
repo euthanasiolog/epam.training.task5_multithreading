@@ -1,15 +1,18 @@
 package entity;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 /**
  * Created by piatr on 15.08.18.
  */
 public class Ship {
-    private int cargo;
-    private String[] product;
+    private volatile int cargo;
+    private Deque<String> item;
 
     public Ship(int cargo) {
         this.cargo = cargo;
-        product = new String[cargo];
+        item = new ArrayDeque<>(cargo);
     }
 
     public int getCargo() {
@@ -20,11 +23,8 @@ public class Ship {
         this.cargo = cargo;
     }
 
-    public String[] getProduct() {
-        return product;
+    public Deque<String> getItem() {
+        return item;
     }
 
-    public void setProduct(String[] product) {
-        this.product = product;
-    }
 }
