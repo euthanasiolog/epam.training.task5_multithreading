@@ -2,6 +2,7 @@ package controller;
 
 import entity.Port;
 import entity.Ship;
+import logic.PortManager;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -19,11 +20,12 @@ public class Controller {
     private static final Semaphore SEMAPHORE = new Semaphore(Port.getDockCount(), true);
     private static ExecutorService executorService = Executors.newCachedThreadPool();
     private static final Logger LOGGER = Logger.getLogger(Controller.class);
+    private static PortManager portManager = new PortManager(SEMAPHORE, PORT);
 
     public static void main(String[] args) {
         List<Callable<Integer>> callable = new ArrayList<>();
         for (int i = 0; i<15; i++) {
-            callable.add(new Ship((int) (Math.random()*20+2), true, SEMAPHORE, PORT));
+            callable.add(new Ship((int) (Math.random()*20+2), true, portManager));
         }
         try {
             executorService.invokeAll(callable);
