@@ -13,7 +13,7 @@ public class Port {
     private Dock[] docks;
     private static final int DOCK_COUNT = 5;
     private AtomicInteger storage;
-    private static final int STORAGE_CAPACITY = 300000;
+    private static final int STORAGE_CAPACITY = 30;
     private static ReentrantLock lock = new ReentrantLock();
 
     private Port() {

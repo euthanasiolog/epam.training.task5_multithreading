@@ -1,8 +1,10 @@
 package logic;
 
 import entity.Port;
+import org.apache.log4j.Logger;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -11,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class StorageManager extends Thread {
     private ReentrantLock lock = new ReentrantLock();
     private Port port;
+    private static final Logger LOGGER = Logger.getLogger(StorageManager.class);
 
     public StorageManager (Port port) {
         this.port = port;
@@ -30,6 +33,12 @@ public class StorageManager extends Thread {
              port.setStorage(Port.getStorageCapacity()/2);
          }
          lock.unlock();
+            try {
+                TimeUnit.MILLISECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                LOGGER.error("demon error");
+            }
         }
     }
 }

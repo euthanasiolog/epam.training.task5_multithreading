@@ -31,7 +31,7 @@ public class Controller {
         try {
             StorageManager storageManager = new StorageManager(PORT);
             storageManager.setDaemon(true);
-            executorService.submit(storageManager);
+            storageManager.start();
             executorService.invokeAll(callable);
             executorService.shutdown();
         } catch (InterruptedException e) {
