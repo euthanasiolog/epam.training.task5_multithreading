@@ -75,7 +75,6 @@ public class PortManager {
                         LOGGER.error("waiting 1 error");
                     }
                     lock.unlock();
-//                    semaphore.release();
                     leaveShip(ship);
                 }
             } else {
@@ -85,7 +84,6 @@ public class PortManager {
                 } else {
                     LOGGER.info("waiting2");
                     lock.unlock();
-//                    semaphore.release();
                     //рекурсивно ждать, пока появится товар на складе, только это еще не работает как надо
                     try {
                         TimeUnit.MILLISECONDS.sleep(10);
