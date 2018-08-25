@@ -1,7 +1,5 @@
 package entity;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -13,7 +11,7 @@ public class Port {
     private Dock[] docks;
     private static final int DOCK_COUNT = 5;
     private AtomicInteger storage;
-    private static final int STORAGE_CAPACITY = 30;
+    private static final int STORAGE_CAPACITY = 50;
     private static ReentrantLock lock = new ReentrantLock();
 
     private Port() {
