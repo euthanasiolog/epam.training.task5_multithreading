@@ -61,6 +61,13 @@ public class PortManager {
             } else {
                 //ждать, пока освободится место на складе
                 LOGGER.info("waiting 1");
+//                try {
+//                    TimeUnit.MILLISECONDS.sleep(10);
+//                } catch (InterruptedException e) {
+//                    Thread.currentThread().interrupt();
+//                    LOGGER.error("waiting 1 error");
+//                }
+//                leaveShip(ship);
             }
         } else {
             if (port.getStorage().get()>=ship.getCargo().get()) {
@@ -69,6 +76,13 @@ public class PortManager {
             } else {
                 LOGGER.info("waiting2");
                 //ждать, пока появится товар на складе
+//                try {
+//                    TimeUnit.MILLISECONDS.sleep(10);
+//                } catch (InterruptedException e) {
+//                    Thread.currentThread().interrupt();
+//                    LOGGER.error("waiting 1 error");
+//                }
+//                leaveShip(ship);
             }
         }
         LOGGER.info("Ship "+Thread.currentThread().getName()+" leave dock"+ship.getDockNumber());
