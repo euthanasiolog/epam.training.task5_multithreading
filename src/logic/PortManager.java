@@ -65,8 +65,12 @@ public class PortManager {
                 if ((Port.getStorageCapacity() - port.getStorage().get()) >= ship.getCargo().get()) {
                     port.setStorage(port.getStorage().get() + ship.getCargo().get());
                     ship.getCargo().set(0);
+                    LOGGER.info("Ship " + Thread.currentThread().getName() + " leave dock" + ship.getDockNumber());
+                    port.getDocks()[ship.getDockNumber().get()].setBusy(false);
+                    lock.unlock();
+                    semaphore.release();
                 } else {
-                    //рекурсивно ждать, пока освободится место на складе, только это еще не работает как надо
+                    //рекурсивно ждать, пока освободится место на складе
                     LOGGER.info("waiting 1 " + Thread.currentThread().getName());
                     try {
                         TimeUnit.MILLISECONDS.sleep(10);
@@ -81,10 +85,14 @@ public class PortManager {
                 if (port.getStorage().get() >= ship.getCargo().get()) {
                     port.setStorage(port.getStorage().get() - ship.getCargo().get());
                     ship.getCargo().set(0);
+                    LOGGER.info("Ship " + Thread.currentThread().getName() + " leave dock" + ship.getDockNumber());
+                    port.getDocks()[ship.getDockNumber().get()].setBusy(false);
+                    lock.unlock();
+                    semaphore.release();
                 } else {
                     LOGGER.info("waiting2");
                     lock.unlock();
-                    //рекурсивно ждать, пока появится товар на складе, только это еще не работает как надо
+                    //рекурсивно ждать, пока появится товар на складе
                     try {
                         TimeUnit.MILLISECONDS.sleep(10);
                     } catch (InterruptedException e) {
@@ -94,10 +102,7 @@ public class PortManager {
                     leaveShip(ship);
                 }
             }
-        LOGGER.info("Ship " + Thread.currentThread().getName() + " leave dock" + ship.getDockNumber());
-        port.getDocks()[ship.getDockNumber().get()].setBusy(false);
-        lock.unlock();
-        semaphore.release();
+
         }
     }
 
