@@ -40,7 +40,6 @@ public class PortManager {
             }
             j++;
         }
-
         LOGGER.info("Ship "+Thread.currentThread().getName()+" get dock"+ship.getDockNumber());
         lock.unlock();
         try {
@@ -102,9 +101,6 @@ public class PortManager {
                     leaveShip(ship);
                 }
             }
-
         }
     }
-
-
 }

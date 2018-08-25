@@ -16,7 +16,6 @@ public class StorageManager extends Thread {
 
     public StorageManager (Port port) {
         this.port = port;
-
     }
 
     @Override
