@@ -31,18 +31,17 @@ public class PortManager {
         }
         lock.lock();
 
-//        do {
-//            if (!port.getDocks()[j].isBusy().get()) {
-//                port.getDocks()[j].setBusy(true);
-//            } else j++;
-//        } while (port.getDocks()[j].isBusy().get());
-        for (int k = 0; k<port.getDocks().length;k++){
-            if (!port.getDocks()[k].isBusy().get()) {
-                port.getDocks()[k].setBusy(true);
-                ship.setDockNumber(k);
-                break;
+        int j = 0;
+        boolean b = false;
+        while (!b&&j<port.getDocks().length){
+            if (!port.getDocks()[j].isBusy().get()){
+                port.getDocks()[j].setBusy(true);
+                ship.setDockNumber(j);
+                b = true;
             }
+            j++;
         }
+
         LOGGER.info("Ship "+Thread.currentThread().getName()+" get dock"+ship.getDockNumber());
         lock.unlock();
         try {
