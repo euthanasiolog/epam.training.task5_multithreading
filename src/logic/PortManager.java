@@ -80,7 +80,7 @@ public class PortManager {
 //                    TimeUnit.MILLISECONDS.sleep(10);
 //                } catch (InterruptedException e) {
 //                    Thread.currentThread().interrupt();
-//                    LOGGER.error("waiting 1 error");
+//                    LOGGER.error("waiting 2 error");
 //                }
 //                leaveShip(ship);
             }
