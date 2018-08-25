@@ -2,55 +2,62 @@ package entity;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by piatr on 15.08.18.
  */
 public class Port {
-    private int dock; // количество доков
-    private int capacity; // вместимость склада
-    private Deque<String> storage; // склад
     private static Port instance;
+    private Dock[] docks;
+    private static final int DOCK_COUNT = 5;
+    private AtomicInteger storage;
+    private static final int STORAGE_CAPACITY = 300000;
     private static ReentrantLock lock = new ReentrantLock();
 
-    private Port(int dock, int capacity) {
-        this.dock = dock;
-        this.capacity = capacity;
-        storage = new ArrayDeque<>(capacity);
+    private Port() {
+        this.docks = new Dock[DOCK_COUNT];
+        for (int i = 0;i<docks.length;i++){
+            docks[i]= new Dock();
+            docks[i].setBusy(false);
+        }
+        this.storage = new AtomicInteger();
+        storage.set(0);
     }
 
-    public static Port getInstance(int dock, int capacity) {
+    public static Port getInstance() {
         if (instance == null) {
             lock.lock();
-            try
-            {
-                if (instance == null) return new Port(dock, capacity);
-            } finally {
+            try {
+                if (instance == null)
+                    instance = new Port();
+                    return instance;
+            }
+            finally {
             lock.unlock();
             }
         }
         return instance;
     }
 
-    public int getDock() {
-        return dock;
+    public Dock[] getDocks() {
+        return docks;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public Deque<String> getStorage() {
+    public AtomicInteger getStorage() {
         return storage;
     }
 
-    public boolean addItem (String item) {
-        return storage.offerLast(item);      // Проверить, работает ли это
+    public void setStorage(int storage) {
+        this.storage.set(storage);
     }
 
-    public String removeItem() {
-        return storage.pollFirst();
+    public static int getStorageCapacity() {
+        return STORAGE_CAPACITY;
+    }
+
+    public static int getDockCount() {
+        return DOCK_COUNT;
     }
 }
