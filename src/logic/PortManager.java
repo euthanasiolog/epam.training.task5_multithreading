@@ -3,7 +3,6 @@ package logic;
 import entity.Port;
 import entity.Ship;
 import org.apache.log4j.Logger;
-
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -52,7 +51,7 @@ public class PortManager {
 
     public void leaveShip(Ship ship) {
         lock.lock();
-        if (ship.getCargo().get() > Port.getStorageCapacity() / 2) {// если такой большой корабль, то не будем разгружать,
+        if (ship.getCargo().get() > (Port.getStorageCapacity()/2)) {// если такой большой корабль, то не будем разгружать,
                                                                     // а то места на складе не хватит или товаров.
             LOGGER.info("Ship " + Thread.currentThread().getName() + " leave dock with nothing " + ship.getDockNumber());
             port.getDocks()[ship.getDockNumber().get()].setBusy(false);
@@ -60,7 +59,6 @@ public class PortManager {
             semaphore.release();
         } else {
             if (ship.getIsFull().get()) {
-
                 if ((Port.getStorageCapacity() - port.getStorage().get()) >= ship.getCargo().get()) {
                     port.setStorage(port.getStorage().get() + ship.getCargo().get());
                     ship.getCargo().set(0);
@@ -69,13 +67,12 @@ public class PortManager {
                     lock.unlock();
                     semaphore.release();
                 } else {
-                    //рекурсивно ждать, пока освободится место на складе
-                    LOGGER.info("waiting 1 " + Thread.currentThread().getName());
+                    LOGGER.info("waiting remove item " + Thread.currentThread().getName());
                     try {
-                        TimeUnit.MILLISECONDS.sleep(10);
+                        TimeUnit.MILLISECONDS.sleep(20);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
-                        LOGGER.error("waiting 1 error");
+                        LOGGER.error("waiting remove error with "+Thread.currentThread().getName());
                     }
                     lock.unlock();
                     leaveShip(ship);
@@ -89,14 +86,13 @@ public class PortManager {
                     lock.unlock();
                     semaphore.release();
                 } else {
-                    LOGGER.info("waiting2");
+                    LOGGER.info("waiting get item "+Thread.currentThread().getName());
                     lock.unlock();
-                    //рекурсивно ждать, пока появится товар на складе
                     try {
-                        TimeUnit.MILLISECONDS.sleep(10);
+                        TimeUnit.MILLISECONDS.sleep(20);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
-                        LOGGER.error("waiting 2 error");
+                        LOGGER.error("waiting get error with "+Thread.currentThread().getName());
                     }
                     leaveShip(ship);
                 }

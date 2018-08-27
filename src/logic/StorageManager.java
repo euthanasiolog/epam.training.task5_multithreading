@@ -22,15 +22,15 @@ public class StorageManager extends Thread {
     public void run() {
         while (true) {
          lock.lock();
-         if (port.getStorage().get()<(Port.getStorageCapacity()/5)) {
-             port.setStorage(port.getStorage().get()+(Port.getStorageCapacity()/2));
-             //если на складе мало товара, добавляем половину вместимости
+         if (port.getStorage().get()<(Port.getStorageCapacity()/2+1)) {
+             //если на складе мало товара, добавляем
+             port.setStorage((Port.getStorageCapacity()/10*9));
          }
          lock.unlock();
          lock.lock();
-         if (port.getStorage().get()>(Port.getStorageCapacity()/5)*3) {
-             port.setStorage(Port.getStorageCapacity()/5);
+         if (port.getStorage().get()>(Port.getStorageCapacity()/5)*4) {
              //а если много, то разгружаем склад
+             port.setStorage(Port.getStorageCapacity()/10);
          }
          lock.unlock();
             try {

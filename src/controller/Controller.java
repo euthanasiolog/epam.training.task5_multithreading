@@ -28,6 +28,9 @@ public class Controller {
         for (int i = 0; i<15; i++) {
             callable.add(new Ship((int) (Math.random()*20+2), true, portManager));
         }
+        for (int i = 0; i<15; i++) {
+            callable.add(new Ship((int) (Math.random()*20+2), false, portManager));
+        }
         try {
             StorageManager storageManager = new StorageManager(PORT);
             storageManager.setDaemon(true);
