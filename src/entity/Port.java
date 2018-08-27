@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -57,5 +58,24 @@ public class Port {
 
     public static int getDockCount() {
         return DOCK_COUNT;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Port)) return false;
+        Port port = (Port) o;
+        if (!(port.docks.length==docks.length)) return false;
+        for (int i=0;i<docks.length;i++) {
+            if (!port.docks[i].equals(docks[i])) return false;
+        }
+        return storage.equals(port.storage);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(docks);
+        result = 31 * result + storage.hashCode();
+        return result;
     }
 }

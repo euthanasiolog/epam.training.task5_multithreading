@@ -53,7 +53,7 @@ public class PortManager {
     public void leaveShip(Ship ship) {
         lock.lock();
         if (ship.getCargo().get() > Port.getStorageCapacity() / 2) {// если такой большой корабль, то не будем разгружать,
-            // а то места на складе не хватит или товаров.
+                                                                    // а то места на складе не хватит или товаров.
             LOGGER.info("Ship " + Thread.currentThread().getName() + " leave dock with nothing " + ship.getDockNumber());
             port.getDocks()[ship.getDockNumber().get()].setBusy(false);
             lock.unlock();

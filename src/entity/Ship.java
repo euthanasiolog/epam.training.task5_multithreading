@@ -14,7 +14,6 @@ public class Ship implements Callable<Integer>{
     private AtomicInteger cargo = new AtomicInteger();
     private AtomicBoolean isFull = new AtomicBoolean();
     private AtomicInteger dockNumber = new AtomicInteger();
-    private final static Logger LOGGER = Logger.getLogger(Ship.class);
     private PortManager portManager;
 
     public Ship(int cargo, boolean isFull, PortManager portManager) {
@@ -45,5 +44,25 @@ public class Ship implements Callable<Integer>{
 
     public void setDockNumber(int dockNumber) {
         this.dockNumber.set(dockNumber);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ship)) return false;
+        Ship ship = (Ship) o;
+        if (!cargo.equals(ship.cargo)) return false;
+        if (!isFull.equals(ship.isFull)) return false;
+        if (!dockNumber.equals(ship.dockNumber)) return false;
+        return portManager != null ? portManager.equals(ship.portManager) : ship.portManager == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = cargo.hashCode();
+        result = 31 * result + isFull.hashCode();
+        result = 31 * result + dockNumber.hashCode();
+        result = 31 * result + (portManager != null ? portManager.hashCode() : 0);
+        return result;
     }
 }
