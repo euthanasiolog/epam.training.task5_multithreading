@@ -1,8 +1,6 @@
 package entity;
 
 import logic.PortManager;
-import org.apache.log4j.Logger;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
